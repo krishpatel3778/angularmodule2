@@ -1,8 +1,9 @@
 <!doctype html>
-<html lang="en" ng-app="ShoppingApp">
+<html lang="en" ng-app="ShoppingListCheckOff">
   <head>
     <title>Shopping List Check Off</title>
-    <<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="app.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       .emptyMessage {
@@ -29,22 +30,31 @@
   <div class="row">
 
     <!-- To Buy List -->
-    <div class="col-md-6">
+    <div class="col-md-6" ng-controller="ToBuyController as buy">
+    <input ng-model="buy.itemName" placeholder="Name"></input>
+    <input ng-model="buy.itemQuantity" placeholder="Quantity"></input>
+    <button ng-click="buy.add()"> Add a new item </button>
      <h2>To Buy:</h2>
      <ul>
-       <li>Buy 10 cookies <button class="btn btn-default"><span class="glyphicon glyphicon-ok"></span> Bought</button></li>
-       <li>Buy 10 cookies <button class="btn btn-default"><span class="glyphicon glyphicon-ok"></span> Bought</button></li>
+       <li ng-repeat="items in buy.items">
+         Buy {{items.quantity}}   {{items.name}}
+         <button ng-click="buy.moveToBought($index)">
+          Bought</button>
+          <button ng-click="buy.removeItem($index)" >
+           Remove</button>
+      </li>
      </ul>
-     <div class="emptyMessage">Everything is bought!</div>
+     <div class="emptyMessage" ng-show="buy.showMessage()">Everything is bought!</div>
     </div>
 
     <!-- Already Bought List -->
-    <div class="col-md-6">
+    <div class="col-md-6" ng-controller="AlreadyBoughtController as bought">
      <h2>Already Bought:</h2>
      <ul>
-       <li>Bought 10 cookies</li>
+       <li ng-repeat="items in bought.items">Bought {{items.quantity}}   {{items.name}}
+       <button  ng-click="bought.undo($index)">Unbuy</button></li>
      </ul>
-     <div class="emptyMessage">Nothing bought yet.</div>
+     <div class="emptyMessage" ng-show="bought.showMessage()">Nothing bought yet.</div>
     </div>
   </div>
 </div>
